@@ -3,11 +3,15 @@
     "runtime": "org.freedesktop.Platform",
     "runtime-version": "22.08",
     "sdk": "org.freedesktop.Sdk",
+	"sdk-extensions": [
+		"org.freedesktop.Sdk.Extension.openjdk17"
+	],
     "command": "processing",
     "build-options": {
         "cflags": "-O2 -g",
         "cxxflags": "-O2 -g",
         "env": {
+            "JAVA_HOME": "/app/jre",
             "V": "1"
         }
     },
@@ -15,6 +19,8 @@
         "--socket=x11",
         "--share=ipc",
         "--device=all",
+		"--env=PATH=/app/bin:/app/jre/bin:/usr/bin",
+		"--env=JAVA_HOME=/app/jre",
         "--filesystem=home",
         "--socket=pulseaudio",
         "--share=network"
@@ -28,82 +34,59 @@
     ],
     "modules": [
         {
+            "name": "openjdk",
+            "buildsystem": "simple",
+            "build-commands": [
+                "/usr/lib/sdk/openjdk17/install.sh"
+            ]
+        },
+        {
             "name": "processing",
             "buildsystem": "simple",
             "build-commands": [
-                "install -d /app/share/processing",
-                "cp -r * /app/share/processing",
-                "install -D processing.sh /app/bin/processing",
-                "install -D appdata.xml /app/share/metainfo/org.processing.processingide.appdata.xml",
-                "install -D desktop.template /app/share/applications/org.processing.processingide.desktop",
-                "install -D processing-pde.xml /app/share/mime/packages/org.processing.processingide.xml",
-                "install -D pde-64.png /app/share/icons/hicolor/64x64/apps/org.processing.processingide.png",
-                "install -D pde-128.png /app/share/icons/hicolor/128x128/apps/org.processing.processingide.png",
-                "install -D lib/desktop.template export/share/applications/org.processing.processingide.desktop",
-                "sed -i -e 's|<BINARY_LOCATION>|processing|' -e 's|<ICON_NAME>|org.processing.processingide|' export/share/applications/org.processing.processingide.desktop",
-                "sed -i -e 's|Programming;||' export/share/applications/org.processing.processingide.desktop",
-                "install -D lib/icons/pde-16.png export/share/icons/hicolor/16x16/apps/org.processing.processingide.png",
-                "install -D lib/icons/pde-16.png export/share/icons/hicolor/16x16/mimetypes/org.processing.processingide-text-x-processing.png",
-                "install -D lib/icons/pde-32.png export/share/icons/hicolor/32x32/apps/org.processing.processingide.png",
-                "install -D lib/icons/pde-32.png export/share/icons/hicolor/32x32/mimetypes/org.processing.processingide-text-x-processing.png",
-                "install -D lib/icons/pde-48.png export/share/icons/hicolor/48x48/apps/org.processing.processingide.png",
-                "install -D lib/icons/pde-48.png export/share/icons/hicolor/48x48/mimetypes/org.processing.processingide-text-x-processing.png",
-                "install -D lib/icons/pde-64.png export/share/icons/hicolor/64x64/apps/org.processing.processingide.png",
-                "install -D lib/icons/pde-64.png export/share/icons/hicolor/64x64/mimetypes/org.processing.processingide-text-x-processing.png",
-                "install -D lib/icons/pde-128.png export/share/icons/hicolor/128x128/apps/org.processing.processingide.png",
-                "install -D lib/icons/pde-128.png export/share/icons/hicolor/128x128/mimetypes/org.processing.processingide-text-x-processing.png",
-                "install -D lib/icons/pde-256.png export/share/icons/hicolor/256x256/apps/org.processing.processingide.png",
-                "install -D lib/icons/pde-256.png export/share/icons/hicolor/256x256/mimetypes/org.processing.processingide-text-x-processing.png",
-                "install -D lib/icons/pde-512.png export/share/icons/hicolor/512x512/apps/org.processing.processingide.png",
-                "install -D lib/icons/pde-512.png export/share/icons/hicolor/512x512/mimetypes/org.processing.processingide-text-x-processing.png",
-                "install -D lib/icons/pde-1024.png export/share/icons/hicolor/1024x1024/apps/org.processing.processingide.png",
-                "install -D lib/icons/pde-1024.png export/share/icons/hicolor/1024x1024/mimetypes/org.processing.processingide-text-x-processing.png"
+                "ant/bin/ant clean -buildfile processing4/build/",
+                "ant/bin/ant clean-libs -buildfile processing4/build/",
+                "ant/bin/ant build -buildfile processing4/build/",
+                ".processing4/build/linux/install.sh"
             ],
             "sources": [
                 {
+                    "type": "git",
+                    "url": "https://github.com/processing/processing-examples.git",
+                    "commit": "5266f3022f583e88aeb4c2a18055536bff985594",
+                    "dest": "processing-examples",
+                    "x-checker-data": {
+                        "type": "git"
+                    }
+                },
+                {
+                    "type": "git",
+                    "url": "https://github.com/processing/processing4.git",
+                    "tag": "processing-1292-4.2",
+                    "commit": "adad1a17c09d623ed0647fbd7b0ea0162b63a9b3",
+                    "dest": "processing4",
+                    "x-checker-data": {
+                        "type": "git",
+                        "tag-pattern": "^processing-([\\d.]+)-([\\d.]+)$"
+                    }
+                },
+                {
                     "type": "archive",
-                    "url": "https://github.com/processing/processing4/releases/download/processing-1292-4.2/processing-4.2-linux-x64.tgz",
-                    "sha256": "8465313ef2e9bc566f248bc812691db73eadcff0b68a6e595eacaf68489282d7"
-                },
-                {
-                    "type": "file",
-                    "url": "https://raw.githubusercontent.com/processing/processing4/processing-1292-4.2/build/linux/appdata.xml",
-                    "sha256": "e6a142a75dece42fdee52cba1f9258f866bc95bc6318f04e92a92e1a301cac39"
+                    "url": "https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.13-bin.tar.xz",
+                    "sha256": "de0a860bf339e6975558f426772a6aa2c6ae0856215dd9aaf57aa2476d665664",
+                    "dest": "ant"
                 },
                 {
                     "type": "patch",
-                    "path": "processing-add-appdata-tags.patch",
-                    "strip-components": 3
-                },
-                {
-                    "type": "file",
-                    "url": "https://raw.githubusercontent.com/processing/processing4/processing-1292-4.2/build/linux/processing-pde.xml",
-                    "sha256": "79e70baa8c1d81a60ac1bc59ea642bf80c638e5cb0ec7fe8372503bb8f2baa7f"
+                    "path": "processing-add-appdata-tags.patch"
                 },
                 {
                     "type": "patch",
-                    "path": "processing-mime-type-icon.patch",
-                    "strip-components": 3
-                },
-                {
-                    "type": "file",
-                    "url": "https://raw.githubusercontent.com/processing/processing4/processing-1292-4.2/build/linux/desktop.template",
-                    "sha256": "d34cfb197caaa8b9b30d0ed8dde210735e42a6fd4d481388df11c239770f6c44"
+                    "path": "processing-mime-type-icon.patch"
                 },
                 {
                     "type": "patch",
-                    "path": "processing-desktop-template-icon.patch",
-                    "strip-components": 3
-                },
-                {
-                    "type": "file",
-                    "url": "https://raw.githubusercontent.com/processing/processing4/processing-1292-4.2/build/shared/lib/icons/pde-64.png",
-                    "sha256": "d4a3619569e06f8ea8e7d8576a89b045c4e6bdc7623561ed086e1173e3a421b2"
-                },
-                {
-                    "type": "file",
-                    "url": "https://raw.githubusercontent.com/processing/processing4/processing-1292-4.2/build/shared/lib/icons/pde-128.png",
-                    "sha256": "2cab3cd180754f4210170182bb478cabf742b98a03a3a7f8942dc39bdf7555ba"
+                    "path": "processing-desktop-template-icon.patch"
                 },
                 {
                     "type": "script",
