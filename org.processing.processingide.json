@@ -44,9 +44,9 @@
             "name": "processing",
             "buildsystem": "simple",
             "build-commands": [
-                "ant/bin/ant build -buildfile processing4/build/",
-                "ant/bin/ant clean -buildfile processing4/build/",
-                "ant/bin/ant clean-libs -buildfile processing4/build/",
+                "ant/bin/ant build -f processing4/build/",
+                "ant/bin/ant clean -f processing4/build/",
+                "ant/bin/ant clean-libs -f processing4/build/",
                 ".processing4/build/linux/install.sh"
             ],
             "sources": [
