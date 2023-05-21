@@ -74,7 +74,12 @@
                     "type": "archive",
                     "url": "https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.13-bin.tar.xz",
                     "sha256": "de0a860bf339e6975558f426772a6aa2c6ae0856215dd9aaf57aa2476d665664",
-                    "dest": "ant"
+                    "dest": "ant",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 50,
+                        "url-template": "https://dlcdn.apache.org//ant/binaries/apache-ant-$version-bin.tar.xz"
+                    }
                 },
                 {
                     "type": "patch",
