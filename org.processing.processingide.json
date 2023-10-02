@@ -1,7 +1,7 @@
 {
     "id": "org.processing.processingide",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "22.08",
+    "runtime-version": "23.08",
     "sdk": "org.freedesktop.Sdk",
 	"sdk-extensions": [
 		"org.freedesktop.Sdk.Extension.openjdk17"
@@ -63,7 +63,7 @@
                     "type": "git",
                     "url": "https://github.com/processing/processing4.git",
                     "tag": "processing-1293-4.3",
-                    "commit": "adad1a17c09d623ed0647fbd7b0ea0162b63a9b3",
+                    "commit": "c79ad7f19a7f61661cfbb0ffde18ffb13e44b109",
                     "dest": "processing4",
                     "x-checker-data": {
                         "type": "git",
