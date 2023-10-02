@@ -62,7 +62,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/processing/processing4.git",
-                    "tag": "processing-1292-4.2",
+                    "tag": "processing-1293-4.3",
                     "commit": "adad1a17c09d623ed0647fbd7b0ea0162b63a9b3",
                     "dest": "processing4",
                     "x-checker-data": {
